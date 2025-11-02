@@ -6,7 +6,8 @@ package proyecto_estructuras;
 
 /**
  *
- * @author Antho
+ * @author Antho, Miguel Sulbarán
+ * 
  */
 public class Grafo{
     private NodoGrafo primero;
