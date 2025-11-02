@@ -49,7 +49,7 @@ public class ListaAdyacencia {
         String cadena = "";
 
         if (this.Esvacia()) {
-            return "No ha agregado amigos";
+            return "cero cuentas.";
         } else {
             pAux = this.pPrimero;
             while (pAux != null) {
@@ -66,6 +66,37 @@ public class ListaAdyacencia {
             Arco nodo = new Arco(Destino);
             Insertar(nodo);
         }
+    }
+    
+    
+    public String EliminarAdyacencia(String perfil) {
+        if (this.Esvacia()) {
+            return "No hay perfiles agregados por eliminar";
+        }
+
+        if (this.pPrimero.Destino.equals(perfil)) {
+            this.pPrimero = this.pPrimero.pSiguiente;
+            if (this.pPrimero == null) {
+                this.pUltimo = null;
+            }
+            return "No hay elementos por eliminar";
+        }
+        
+        Arco pPenul = this.pPrimero;
+        Arco pBuscador = this.pPrimero.pSiguiente;
+
+        while (pBuscador != null && !pBuscador.Destino.equals(perfil)) {
+            pPenul = pBuscador;
+            pBuscador = pBuscador.pSiguiente;
+        }
+
+        if (pBuscador != null) {
+            pPenul.pSiguiente = pBuscador.pSiguiente;
+            if (pBuscador == this.pUltimo) {
+                this.pUltimo = pPenul;
+            }
+        }
+        return "Perfil eliminado de amigos";
     }
 
 }
