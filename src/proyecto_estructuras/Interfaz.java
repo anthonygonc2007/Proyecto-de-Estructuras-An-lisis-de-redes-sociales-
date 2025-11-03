@@ -4,13 +4,20 @@
  */
 package proyecto_estructuras;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 /**
  *
  * @author Miguel Sulbarán
  * 
  */
 public class Interfaz extends javax.swing.JFrame {
-
+    
     /**
      * Creates new form Interfaz
      */
@@ -19,6 +26,51 @@ public class Interfaz extends javax.swing.JFrame {
         initComponents();
     }
 
+    public void Leertexto(File archivo, Grafo grafito) {
+        try (BufferedReader buffer = new BufferedReader(new FileReader(archivo))) {
+                String aux;
+                boolean leerUsuarios = false;
+                boolean leerRelaciones = false;
+
+                while ((aux = buffer.readLine()) != null) {
+                    aux = aux.trim();
+                    if (aux.isEmpty()) continue;
+
+                    if (aux.equalsIgnoreCase("Usuarios")) {
+                        leerUsuarios = true;
+                        leerRelaciones = false;
+                        continue;
+                    }
+                    if (aux.equalsIgnoreCase("Relaciones")) {
+                        leerUsuarios = false;
+                        leerRelaciones = true;
+                        continue;
+                    }
+
+                    if (leerUsuarios) {
+                        grafito.NuevoNodo(aux);
+                        continue;
+                    }
+
+                    if (leerRelaciones) {
+                        String[] partes = aux.split(",");
+                        if (partes.length == 2) {
+                            String origen = partes[0].trim();
+                            String destino = partes[1].trim();
+                            grafito.NuevaArista(origen, destino);
+                        }
+                    }
+                }
+                
+         } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                "Error al leer el archivo: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+    }
+                
+    }
+
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -29,25 +81,132 @@ public class Interfaz extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        botonagregararchivo = new javax.swing.JButton();
+        Exit = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        Resultado = new javax.swing.JTextArea();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel1.setBackground(new java.awt.Color(204, 255, 255));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel1.setText("Red Social");
+        jLabel1.setToolTipText("");
+
+        botonagregararchivo.setText("Agregar Archivo de Texto (.txt)");
+        botonagregararchivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonagregararchivoActionPerformed(evt);
+            }
+        });
+
+        Exit.setText("Salir");
+        Exit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ExitActionPerformed(evt);
+            }
+        });
+
+        Resultado.setColumns(20);
+        Resultado.setRows(5);
+        jScrollPane1.setViewportView(Resultado);
+
+        jLabel2.setText("Lista de seguidores y seguidos:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 550, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(Exit)
+                .addGap(22, 22, 22))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(225, 225, 225)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(170, 170, 170)
+                        .addComponent(botonagregararchivo))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(38, 38, 38)
+                        .addComponent(jLabel2)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(38, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(33, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 350, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jLabel1)
+                .addGap(27, 27, 27)
+                .addComponent(botonagregararchivo)
+                .addGap(22, 22, 22)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addComponent(Exit)
+                .addGap(21, 21, 21))
         );
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 550, 350));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void ExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_ExitActionPerformed
+
+    private void botonagregararchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonagregararchivoActionPerformed
+        JFileChooser Leertexto = new JFileChooser();
+        Leertexto.setDialogTitle("Seleccionar archivo de texto .txt por favor");
+
+  
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos de texto (*.txt)", "txt");
+        Leertexto.setFileFilter(filtro);
+
+        int lectura = Leertexto.showOpenDialog(this);
+
+        if (lectura == JFileChooser.APPROVE_OPTION) {
+            File archivo = Leertexto.getSelectedFile();
+
+            if (!archivo.getName().toLowerCase().endsWith(".txt")) {
+            JOptionPane.showMessageDialog(this, 
+                "Error: Solo se permiten archivos con extensión .txt",
+                "Archivo inválido", 
+                JOptionPane.ERROR_MESSAGE);
+                return;
+                }
+
+        
+            try {
+                Grafo grafito = new Grafo();
+                Leertexto(archivo, grafito);
+
+                JOptionPane.showMessageDialog(this, 
+                "Archivo cargado correctamente.",
+                "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                
+                Resultado.setText(grafito.Recorrer());
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, 
+                "Error al leer el archivo: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+                }
+    }
+    }//GEN-LAST:event_botonagregararchivoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -85,6 +244,12 @@ public class Interfaz extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Exit;
+    private javax.swing.JTextArea Resultado;
+    private javax.swing.JButton botonagregararchivo;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
