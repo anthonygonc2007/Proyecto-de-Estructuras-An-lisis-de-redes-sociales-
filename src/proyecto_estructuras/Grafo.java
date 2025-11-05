@@ -140,19 +140,20 @@ public class Grafo{
         }
     }
     
-    public void LlenarPila(NodoGrafo nodo, String[] pila, int[] tope) {
+    public void LlenarPila(NodoGrafo nodo, Pila Pilita) {
     nodo.Visitado = true;
     Arco arco = nodo.listaAdyacente.pPrimero;
 
     while (arco != null) {
         NodoGrafo destino = BuscarNodo(arco.Destino);
         if (destino != null && !destino.Visitado) {
-            LlenarPila(destino, pila, tope);
+            LlenarPila(destino, Pilita);
         }
         arco = arco.pSiguiente;
     }
 
-    pila[++tope[0]] = nodo.data;
+    Pilita.Apilar(nodo.data);
+    
     }
     
     public void LimpiarVisitados() {
@@ -185,35 +186,40 @@ public class Grafo{
     
     }
     
-    public void DfsInvertido(NodoGrafo nodo, String[] componente, int[] contador) {
+    public String DfsInvertido(NodoGrafo nodo) {
     nodo.Visitado = true;
-    componente[contador[0]++] = nodo.data;
+    String componente = nodo.data + " ";
 
     Arco arco = nodo.listaAdyacente.pPrimero;
     while (arco != null) {
         NodoGrafo destino = BuscarNodo(arco.Destino);
         if (destino != null && !destino.Visitado) {
-            DfsInvertido(destino, componente, contador);
+            componente += DfsInvertido(destino);
         }
         arco = arco.pSiguiente;
         }
+    return componente;
     }
     
     public void Kosaraju() {
-    int n = 0;
-    NodoGrafo auxContador = primero;
-    while (auxContador != null) {
-        n++;
-        auxContador = auxContador.siguiente;
-    }
 
-    String[] pila = new String[n];
-    int[] tope = new int[]{-1};
+    Pila Pilita = new Pila();    
+
+    NodoGrafo pAux = primero;
+    while (pAux != null) {
+        while (pAux != null) {
+            if (!pAux.Visitado) {
+                LlenarPila(pAux, Pilita);
+            }
+            pAux = pAux.siguiente;
+        }
+    
+    }
 
     NodoGrafo aux = primero;
     while (aux != null) {
         if (!aux.Visitado) {
-            LlenarPila(aux, pila, tope);
+            LlenarPila(aux, Pilita);
         }
         aux = aux.siguiente;
     }
@@ -223,33 +229,22 @@ public class Grafo{
 
     String Fuertes = "";
     String Debiles = "";
-    
-    int contador2 = 1;
 
-    while (tope[0] >= 0) {
-        String nombre = pila[tope[0]--];
+    while (!Pilita.EsVacio()) {
+        String nombre = Pilita.Desapilar();
         NodoGrafo nodo = inv.BuscarNodo(nombre);
         if (nodo != null && !nodo.Visitado) {
-            String[] Usuario = new String[n];
-            int[] contador = new int[]{0};
-            inv.DfsInvertido(nodo, Usuario, contador);
-            
-            boolean fuerte = fuerteono(Usuario, contador[0]);
+            String Usuario = inv.DfsInvertido(nodo);
+            int cantidad = Usuario.split(" ").length;
 
-
-
-            for (int i = 0; i < contador[0]; i++) {
-                if (fuerte) {
-                    Fuertes += Usuario[i] + " ";
+                if (cantidad > 1) {
+                    Fuertes += Usuario;
                 } else {
-                    Debiles += Usuario[i] + " ";
+                    Debiles += Usuario;
                 }
-            }
-            contador2++;
             }   
-        
-                  
-        }
+                 
+    }
     
         if (Fuertes.isEmpty()) {
             System.out.println("No hay Usuarios Fuertemente Conectados");
@@ -264,50 +259,6 @@ public class Grafo{
         }
     
     }
-    
-    private boolean fuerteono(String[] componente, int tamaño) {
-        if (tamaño < 2) return false;
-
-        for (int i = 0; i < tamaño; i++) {
-            String origen = componente[i];
-            int alcanzados = ContarAlcanzables(origen, componente, tamaño);
-            if (alcanzados < tamaño) {
-                return false;
-            }
-        }
-        return true;
-        }
-
-        private int ContarAlcanzables(String origen, String[] componente, int tamaño) {
-            LimpiarVisitados();
-            NodoGrafo nodoOrigen = BuscarNodo(origen);
-            if (nodoOrigen == null) return 0;
-
-            int[] contador = new int[]{0};
-            Contar(nodoOrigen, componente, tamaño, contador);
-            return contador[0];
-    }
-
-    public void Contar(NodoGrafo nodo, String[] componente, int tamaño, int[] contador) {
-        nodo.Visitado = true;
-        contador[0]++;
-
-        Arco arco = nodo.listaAdyacente.pPrimero;
-        while (arco != null) {
-            NodoGrafo destino = BuscarNodo(arco.Destino);
-            if (destino != null && !destino.Visitado && Perteneceono(destino.data, componente, tamaño)) {
-                Contar(destino, componente, tamaño, contador);
-            }
-            arco = arco.pSiguiente;
-        }
-    }
-
-    public boolean Perteneceono(String nombre, String[] componente, int tamaño) {
-            for (int i = 0; i < tamaño; i++) {
-                if (componente[i].equals(nombre)) return true;
-            }
-            return false;
-        }    
-
 
 }
+
