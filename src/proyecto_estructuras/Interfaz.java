@@ -14,63 +14,70 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 /**
  *
  * @author Antho, Miguel Sulbarán
- * 
+ *
  */
 public class Interfaz extends javax.swing.JFrame {
-    
+
+    private boolean Archivo_txt_Cargado = false;
+    private Grafo grafito;
+
     /**
      * Creates new form Interfaz
      */
     public Interfaz() {
-        this.setVisible(true);
+        this.grafito = new Grafo();
         initComponents();
+        this.setVisible(true);
     }
 
     public void Leertexto(File archivo, Grafo grafito) {
         try (BufferedReader buffer = new BufferedReader(new FileReader(archivo))) {
-                String aux;
-                boolean leerUsuarios = false;
-                boolean leerRelaciones = false;
+            String aux;
+            boolean leerUsuarios = false;
+            boolean leerRelaciones = false;
 
-                while ((aux = buffer.readLine()) != null) {
-                    aux = aux.trim();
-                    if (aux.isEmpty()) continue;
+            while ((aux = buffer.readLine()) != null) {
+                aux = aux.trim();
+                if (aux.isEmpty()) {
+                    continue;
+                }
 
-                    if (aux.equalsIgnoreCase("Usuarios")) {
-                        leerUsuarios = true;
-                        leerRelaciones = false;
-                        continue;
-                    }
-                    if (aux.equalsIgnoreCase("Relaciones")) {
-                        leerUsuarios = false;
-                        leerRelaciones = true;
-                        continue;
-                    }
+                if (aux.equalsIgnoreCase("Usuarios")) {
+                    leerUsuarios = true;
+                    leerRelaciones = false;
+                    continue;
+                }
+                if (aux.equalsIgnoreCase("Relaciones")) {
+                    leerUsuarios = false;
+                    leerRelaciones = true;
+                    continue;
+                }
 
-                    if (leerUsuarios) {
-                        grafito.NuevoNodo(aux);
-                        continue;
-                    }
+                if (leerUsuarios) {
+                    grafito.NuevoNodo(aux);
+                    continue;
+                }
 
-                    if (leerRelaciones) {
-                        String[] partes = aux.split(",");
-                        if (partes.length == 2) {
-                            String origen = partes[0].trim();
-                            String destino = partes[1].trim();
-                            grafito.NuevaArista(origen, destino);
-                        }
+                if (leerRelaciones) {
+                    String[] partes = aux.split(",");
+                    if (partes.length == 2) {
+                        String origen = partes[0].trim();
+                        String destino = partes[1].trim();
+                        grafito.NuevaArista(origen, destino);
+                        this.Archivo_txt_Cargado = true;
                     }
                 }
-                
-         } catch (Exception e) {
+            }
+
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null,
-                "Error al leer el archivo: " + e.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
-    }
-                
+                    "Error al leer el archivo: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            this.Archivo_txt_Cargado = false;
+        }
+
     }
 
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -103,7 +110,7 @@ public class Interfaz extends javax.swing.JFrame {
             }
         });
 
-        Exit.setFont(new java.awt.Font("Swis721 LtEx BT", 0, 12)); // NOI18N
+        Exit.setFont(new java.awt.Font("Georgia", 0, 12)); // NOI18N
         Exit.setText("Salir");
         Exit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -116,13 +123,18 @@ public class Interfaz extends javax.swing.JFrame {
         Resultado.setRows(5);
         jScrollPane1.setViewportView(Resultado);
 
-        jLabel2.setText("Por favor cargue un archivo .txt que contenga los perfiles y relaciones básicas pra ainicializar el programa.");
+        jLabel2.setText("Por favor cargue un archivo .txt que contenga los perfiles y relaciones básicas para inicializar el programa.");
 
         jLabel1.setFont(new java.awt.Font("Georgia", 0, 24)); // NOI18N
         jLabel1.setText("Análisis de Redes Sociales");
 
-        jButton1.setFont(new java.awt.Font("Swis721 LtEx BT", 0, 12)); // NOI18N
+        jButton1.setFont(new java.awt.Font("Georgia", 0, 12)); // NOI18N
         jButton1.setText("Siguiente");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         Label_Muestra_txt.setText("    ");
 
@@ -136,9 +148,9 @@ public class Interfaz extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(139, 139, 139)
+                        .addGap(136, 136, 136)
                         .addComponent(Exit, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18))
+                        .addGap(21, 21, 21))
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -189,42 +201,61 @@ public class Interfaz extends javax.swing.JFrame {
         JFileChooser Leertexto = new JFileChooser();
         Leertexto.setDialogTitle("Seleccionar archivo de texto .txt por favor");
 
-  
         FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos de texto (*.txt)", "txt");
         Leertexto.setFileFilter(filtro);
 
         int lectura = Leertexto.showOpenDialog(this);
 
-        if (lectura == JFileChooser.APPROVE_OPTION) {
+        if (lectura == JFileChooser.APPROVE_OPTION){
             File archivo = Leertexto.getSelectedFile();
 
-            if (!archivo.getName().toLowerCase().endsWith(".txt")) {
-            JOptionPane.showMessageDialog(this, 
-                "Error: Solo se permiten archivos con extensión .txt",
-                "Archivo inválido", 
-                JOptionPane.ERROR_MESSAGE);
+            if (!archivo.getName().toLowerCase().endsWith(".txt")){
+                JOptionPane.showMessageDialog(this,
+                        "Error: Solo se permiten archivos con extensión .txt",
+                        "Archivo inválido",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
-                }
+            }
 
-        
-            try {
-                Grafo grafito = new Grafo();
+            try{
+                //Grafo grafito = new Grafo();
                 Leertexto(archivo, grafito);
 
-                JOptionPane.showMessageDialog(this, 
-                "Archivo cargado correctamente.",
-                "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                
+                JOptionPane.showMessageDialog(this,
+                        "Archivo cargado correctamente.",
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
                 this.Label_Muestra_txt.setText("Los usuarios y relaciones cargadas del archivo .txt son las siguientes:");
                 Resultado.setText(grafito.Recorrer());
 
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, 
-                "Error al leer el archivo: " + e.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
-                }
-    }
+            } catch(Exception e){
+                JOptionPane.showMessageDialog(this,
+                        "Error al leer el archivo: " + e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_botonagregararchivoActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+
+        if (this.Archivo_txt_Cargado == false){
+            JOptionPane.showMessageDialog(this,
+                    "Debe cargar primeramente un archivo .txt antes de continuar.",
+                    "Validación",
+                    JOptionPane.WARNING_MESSAGE);
+
+        }else{
+        Ventana2 ventana2 = new Ventana2(this.grafito);
+        this.dispose();
+
+        ventana2.setVisible(true);
+        ventana2.setLocationRelativeTo(null);
+        //ventana2.setSize(705, 300);
+        ventana2.setResizable(false);
+
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
