@@ -7,7 +7,7 @@ package proyecto_estructuras;
 
 /**
  *
- * @author Antho, Miguel Sulbarán
+ * @author Anthony, Miguel Sulbarán
  * 
  */
 public class Proyecto_Estructuras {
@@ -18,8 +18,9 @@ public class Proyecto_Estructuras {
     public static void main(String[] args) {
         
         Interfaz Interfaz = new Interfaz();
-        Interfaz.setVisible(true);       
-        
+        Interfaz.setVisible(true);   
+        Interfaz.setLocationRelativeTo(null);
+        Interfaz.setResizable(false);
     }
         
 }
