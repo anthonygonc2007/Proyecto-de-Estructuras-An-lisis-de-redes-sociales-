@@ -46,8 +46,8 @@ public class Ventana2 extends javax.swing.JFrame{
         jTextArea1 = new javax.swing.JTextArea();
         CrearPerfil = new javax.swing.JButton();
         EliminarPerfil = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        AgregarAmistad = new javax.swing.JButton();
+        EliminarAmistad = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -108,18 +108,23 @@ public class Ventana2 extends javax.swing.JFrame{
         });
         jPanel1.add(EliminarPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 140, 170, 30));
 
-        jButton4.setFont(new java.awt.Font("Swis721 LtEx BT", 0, 12)); // NOI18N
-        jButton4.setText("Agregar una Amistad a un Perfil");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        AgregarAmistad.setFont(new java.awt.Font("Swis721 LtEx BT", 0, 12)); // NOI18N
+        AgregarAmistad.setText("Agregar una Amistad a un Perfil");
+        AgregarAmistad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                AgregarAmistadActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 100, 240, 30));
+        jPanel1.add(AgregarAmistad, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 100, 240, 30));
 
-        jButton5.setFont(new java.awt.Font("Swis721 LtEx BT", 0, 12)); // NOI18N
-        jButton5.setText("Eliminar una Amistad de un Perfil");
-        jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 140, 240, 30));
+        EliminarAmistad.setFont(new java.awt.Font("Swis721 LtEx BT", 0, 12)); // NOI18N
+        EliminarAmistad.setText("Eliminar una Amistad de un Perfil");
+        EliminarAmistad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EliminarAmistadActionPerformed(evt);
+            }
+        });
+        jPanel1.add(EliminarAmistad, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 140, 240, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -229,9 +234,156 @@ public class Ventana2 extends javax.swing.JFrame{
 
     }//GEN-LAST:event_CrearPerfilActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void AgregarAmistadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarAmistadActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+        String Usuario_Origen = "";
+        String Usuario_Destino = "";
+
+        
+        boolean EsValido = false; 
+        boolean es_valido = false;   
+        boolean Cancelado = false;
+        boolean cancelado = false;
+        
+        while(!EsValido && !Cancelado){
+            Usuario_Origen = JOptionPane.showInputDialog(this,"Ingrese el nombre del usuario del cual desea agregar una amistad (ej: @Aran_Pereira):","Agregar Amistad",JOptionPane.PLAIN_MESSAGE);
+            
+            
+            try{
+                if (Usuario_Origen == null){
+                    Cancelado = true;
+                }else{
+                    Usuario_Origen = Usuario_Origen.trim();
+                    if (Usuario_Origen.isEmpty()){
+                        JOptionPane.showMessageDialog(this,"El nombre de usuario no puede estar vacío.","Error de Formato",JOptionPane.ERROR_MESSAGE);
+
+                    }else if(!Usuario_Origen.startsWith("@")){
+                        JOptionPane.showMessageDialog(this,"El nombre de usuario DEBE comenzar con '@'.","Error de Formato",JOptionPane.ERROR_MESSAGE);
+
+                    }else if (Usuario_Origen.contains(" ")){
+                        JOptionPane.showMessageDialog(this,"El nombre de usuario no puede contener espacios.","Error de Formato",JOptionPane.ERROR_MESSAGE);
+                    }else{
+                        EsValido = true; 
+                    }
+                }
+
+            } catch (Exception e){
+                Cancelado = true;
+            }
+        }
+
+        if(Usuario_Origen != null){
+            while(!es_valido && !cancelado){
+                Usuario_Destino = JOptionPane.showInputDialog(this,"Ingrese el nombre del usuario que desea agregar (ej: @Aran_Pereira):","Agregar Amistad",JOptionPane.PLAIN_MESSAGE);
+            
+            
+                try{
+                    if (Usuario_Destino == null){
+                        cancelado = true;
+                    }else{
+                        Usuario_Destino = Usuario_Destino.trim();
+                        if (Usuario_Destino.isEmpty()){
+                            JOptionPane.showMessageDialog(this,"El nombre de usuario no puede estar vacío.","Error de Formato",JOptionPane.ERROR_MESSAGE);
+
+                        }else if(!Usuario_Destino.startsWith("@")){
+                            JOptionPane.showMessageDialog(this,"El nombre de usuario DEBE comenzar con '@'.","Error de Formato",JOptionPane.ERROR_MESSAGE);
+
+                        }else if (Usuario_Destino.contains(" ")){
+                            JOptionPane.showMessageDialog(this,"El nombre de usuario no puede contener espacios.","Error de Formato",JOptionPane.ERROR_MESSAGE);
+                        }else{
+                            es_valido = true; 
+                        }
+                    }
+
+                } catch (Exception e){
+                    cancelado = true;
+                }
+            }        
+        }
+        
+        if (EsValido == true && es_valido == true) {
+            this.grafoVentana2.NuevaArista(Usuario_Origen, Usuario_Destino); 
+            JOptionPane.showMessageDialog(this, "¡Usuario '" + Usuario_Origen + "' ha agregado al usuario '"+ Usuario_Destino +"' con éxito!");
+        }          
+        
+        
+    }//GEN-LAST:event_AgregarAmistadActionPerformed
+
+    private void EliminarAmistadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarAmistadActionPerformed
+        // TODO add your handling code here:
+        
+        String Usuario_Origen = "";
+        String Usuario_Destino = "";
+
+        
+        boolean EsValido = false; 
+        boolean es_valido = false;   
+        boolean Cancelado = false;
+        boolean cancelado = false;
+        
+        while(!EsValido && !Cancelado){
+            Usuario_Origen = JOptionPane.showInputDialog(this,"Ingrese el nombre del usuario del cual desea eliminar una amistad (ej: @Aran_Pereira):","Eliminar Amistad",JOptionPane.PLAIN_MESSAGE);
+            
+            
+            try{
+                if(Usuario_Origen == null){
+                    Cancelado = true;
+                }else{
+                    Usuario_Origen = Usuario_Origen.trim();
+                    if (Usuario_Origen.isEmpty()){
+                        JOptionPane.showMessageDialog(this,"El nombre de usuario no puede estar vacío.","Error de Formato",JOptionPane.ERROR_MESSAGE);
+
+                    }else if(!Usuario_Origen.startsWith("@")){
+                        JOptionPane.showMessageDialog(this,"El nombre de usuario DEBE comenzar con '@'.","Error de Formato",JOptionPane.ERROR_MESSAGE);
+
+                    }else if(Usuario_Origen.contains(" ")){
+                        JOptionPane.showMessageDialog(this,"El nombre de usuario no puede contener espacios.","Error de Formato",JOptionPane.ERROR_MESSAGE);
+                    }else{
+                        EsValido = true; 
+                    }
+                }
+
+            } catch(Exception e){
+                Cancelado = true;
+            }
+        }
+
+        if(Usuario_Origen != null){
+            while(!es_valido && !cancelado){
+                Usuario_Destino = JOptionPane.showInputDialog(this,"Ingrese el nombre del usuario desea eliminar de la lista de amigos de '"+Usuario_Origen +"' (ej: @Aran_Pereira):","Eliminar Amistad",JOptionPane.PLAIN_MESSAGE);
+            
+            
+                try{
+                    if(Usuario_Destino == null){
+                        cancelado = true;
+                    }else{
+                        Usuario_Destino = Usuario_Destino.trim();
+                        if (Usuario_Destino.isEmpty()){
+                            JOptionPane.showMessageDialog(this,"El nombre de usuario no puede estar vacío.","Error de Formato",JOptionPane.ERROR_MESSAGE);
+
+                        }else if(!Usuario_Destino.startsWith("@")){
+                            JOptionPane.showMessageDialog(this,"El nombre de usuario DEBE comenzar con '@'.","Error de Formato",JOptionPane.ERROR_MESSAGE);
+
+                        }else if (Usuario_Destino.contains(" ")){
+                            JOptionPane.showMessageDialog(this,"El nombre de usuario no puede contener espacios.","Error de Formato",JOptionPane.ERROR_MESSAGE);
+                        }else{
+                            es_valido = true; 
+                        }
+                    }
+
+                } catch (Exception e){
+                    cancelado = true;
+                }
+            }        
+        }
+        
+        if (EsValido == true && es_valido == true) {
+            this.grafoVentana2.EliminarArista(Usuario_Origen, Usuario_Destino); 
+            JOptionPane.showMessageDialog(this, "¡Usuario '" + Usuario_Destino + "' eliminado de la lista de amigos del usuario '"+ Usuario_Origen +"' con éxito!");
+        }               
+        
+        
+    }//GEN-LAST:event_EliminarAmistadActionPerformed
 
     /**
      * @param args the command line arguments
@@ -269,13 +421,13 @@ public class Ventana2 extends javax.swing.JFrame{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AgregarAmistad;
     private javax.swing.JButton BotonSiguiente2;
     private javax.swing.JButton CrearPerfil;
+    private javax.swing.JButton EliminarAmistad;
     private javax.swing.JButton EliminarPerfil;
     private javax.swing.JButton Mostrar_PerfilesVentana2;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
