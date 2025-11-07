@@ -13,18 +13,25 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
+ * Representa la ventana de inicio de la aplicación.
+ * En esta interfaz (JFrame) se carga el archivo inicial
+ * que permite al usuario agregar/eliminar perfiles (nodos), agregar/eliminar en la siguiente ventana (Ventana2)
  *
- * @author Antho, Miguel Sulbarán, Rafael Álvarez
- *
+ * @author Anthony Goncalves, Miguel Sulbaran, Rafael Álvarez
+ * @version 1.0
  */
 public class Interfaz extends javax.swing.JFrame {
 
     private boolean Archivo_txt_Cargado = false;
     private Grafo grafito;
     private String Respaldo_V3;
-
+    
     /**
-     * Creates new form Interfaz
+     * Constructor de la clase Interfaz.
+     * Inicializa una nueva instancia del grafo (grafito), llama al método
+     * 'initComponents()' (auto-generado por NetBeans) para crear
+     * y configurar los componentes visuales de la ventana, y finalmente
+     * la hace visible.
      */
     public Interfaz() {
         this.grafito = new Grafo();
@@ -32,6 +39,20 @@ public class Interfaz extends javax.swing.JFrame {
         this.setVisible(true);
     }
 
+    
+    
+    
+    /**
+     * Método Leertexto
+     * Carga el grafo desde un archivo .txt.
+     * Lee el archivo línea por línea, buscando los títulos "Usuarios"
+     * y "Relaciones" para saber si debe crear Nodos o Aristas.
+     *
+     * busca "Usuarios" y "Relaciones" 
+     *
+     * @param archivo El .txt para cargar.
+     * @param grafito El grafo (vacío) que se va a llenar.
+     */
     public void Leertexto(File archivo, Grafo grafito) {
         this.Respaldo_V3 = archivo.getAbsolutePath();
         try (BufferedReader buffer = new BufferedReader(new FileReader(archivo))) {
@@ -97,7 +118,7 @@ public class Interfaz extends javax.swing.JFrame {
         Resultado = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        Siguiente = new javax.swing.JButton();
         Label_Muestra_txt = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -131,11 +152,11 @@ public class Interfaz extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Georgia", 0, 24)); // NOI18N
         jLabel1.setText("Análisis de Redes Sociales");
 
-        jButton1.setFont(new java.awt.Font("Georgia", 0, 12)); // NOI18N
-        jButton1.setText("Siguiente");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        Siguiente.setFont(new java.awt.Font("Georgia", 0, 12)); // NOI18N
+        Siguiente.setText("Siguiente");
+        Siguiente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                SiguienteActionPerformed(evt);
             }
         });
 
@@ -168,7 +189,7 @@ public class Interfaz extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(Siguiente)
                 .addGap(23, 23, 23))
         );
         jPanel1Layout.setVerticalGroup(
@@ -187,7 +208,7 @@ public class Interfaz extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(37, 37, 37)
-                .addComponent(jButton1)
+                .addComponent(Siguiente)
                 .addGap(18, 18, 18))
         );
 
@@ -196,11 +217,28 @@ public class Interfaz extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Acción del BotonSiguiente2 
+     * Cierra esta ventana (Ventana2) y abre la ventana3, 
+     *
+     * @param evt El evento de clic del botón (auto-generado por Swing).
+     * @author Anthony Goncalves
+     */
     private void ExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitActionPerformed
         this.dispose();
     }//GEN-LAST:event_ExitActionPerformed
 
+    
+     /**
+     * Acción del botonAgregararchivo 
+     * Abre un diálogo {@code JFileChooser} para que el usuario seleccione
+     * que archivo .txt quiere cargar en la interfaz.
+     *  
+     * @param evt El evento de clic del botón (auto-generado por Swing).
+     * @author Anthony Goncalves, Miguel Sulbaran 
+     */
     private void botonagregararchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonagregararchivoActionPerformed
+      
         JFileChooser Leertexto = new JFileChooser();
         Leertexto.setDialogTitle("Seleccionar archivo de texto .txt por favor");
 
@@ -239,7 +277,18 @@ public class Interfaz extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_botonagregararchivoActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    /**
+     * Acción del Siguiente 
+     * Este botón valida si un archivo .txt ha sido cargado exitosamente
+     * (revisando la bandera {@code Archivo_txt_Cargado}).
+     * Si es {@code false}, muestra un mensaje de advertencia pidiendo
+     * al usuario que cargue un archivo.
+     * de lo contrario permite avanzar a la siguiente ventana.
+     * @param evt El evento de clic del botón (auto-generado por Swing).
+     * 
+     * @author Anthony Goncalves 
+     */
+    private void SiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SiguienteActionPerformed
         // TODO add your handling code here:
 
         if (this.Archivo_txt_Cargado == false){
@@ -258,7 +307,7 @@ public class Interfaz extends javax.swing.JFrame {
         ventana2.setResizable(false);
 
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_SiguienteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -300,8 +349,8 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JButton Exit;
     private javax.swing.JLabel Label_Muestra_txt;
     private javax.swing.JTextArea Resultado;
+    private javax.swing.JButton Siguiente;
     private javax.swing.JButton botonagregararchivo;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

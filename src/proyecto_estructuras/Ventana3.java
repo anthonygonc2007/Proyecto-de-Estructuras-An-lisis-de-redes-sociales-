@@ -5,22 +5,45 @@
 package proyecto_estructuras;
 
 import javax.swing.JOptionPane;
+
 /**
+ * Representa la tercera ventana de la aplicación.
+ * Esta interfaz (JFrame) se utiliza para mostrar los resultados
+ * de los algoritmos, como el reporte del análisis de Kosaraju.
  *
  * @author Rafael Álvarez
+ * 
+ * @version 1.0
  */
 public class Ventana3 extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Ventana3.class.getName());
 
-    /**
-     * Creates new form Ventana3
+     /**
+     * Constructor de la clase Ventana3.
+     * Inicializa una nueva instancia del grafo (grafito), llama al método
+     * 'initComponents()' (auto-generado por NetBeans) para crear
+     * y configurar los componentes visuales de la ventana, y finalmente
+     * la hace visible.
      */
     private String resultadoKosaraju;
     private Grafo grafoOriginal;
     private String RespaldoVentana3;
     
     
+    /**
+     * Constructor para la Ventana3 (Ventana de Resultados).
+     * Inicializa los componentes de la GUI, almacena las referencias
+     * y resultados recibidos de la ventana anterior (Ventana2), 
+     * y hace visible la ventana, centrada en la pantalla.
+     *
+     * @param grafo_original El objeto Grafo principal (pasado desde Ventana2).
+     * @param resultado_recibido El String formateado que contiene el
+     * resultado del algoritmo de Kosaraju.
+     * @param Respaldo_V3 Un String de respaldo completo del 'Recorrer()' de Ventana2) para mostrar en esta ventana.
+     * 
+     * @author Rafael Álvarez
+     */   
     public Ventana3(Grafo grafo_original,String resultado_recibido, String Respaldo_V3) {
         initComponents();
         this.grafoOriginal = grafo_original;
@@ -30,6 +53,13 @@ public class Ventana3 extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
     
+    /**
+     * Método MostrarResultados
+     * Recibe un String y lo establece como el contenido del JTextArea
+     * @param resultado 
+     * 
+     * @author Rafael Álvarez
+     */
  private void MostrarResultados(String resultado) {
                 Resultados.setText(resultado);
  }
@@ -43,67 +73,86 @@ public class Ventana3 extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        Etiqueta_amistades = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         Resultados = new javax.swing.JTextArea();
-        jLabel2 = new javax.swing.JLabel();
         Imprimir_amistades = new javax.swing.JButton();
         Imprimir_el_grafo = new javax.swing.JButton();
         Devolverse = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jToggleButton1 = new javax.swing.JToggleButton();
+        jLabel3 = new javax.swing.JLabel();
+        mostrar = new javax.swing.JLabel();
+        Mostrar2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(700, 421));
         setSize(new java.awt.Dimension(700, 421));
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        Etiqueta_amistades.setFont(new java.awt.Font("Georgia", 0, 24)); // NOI18N
-        Etiqueta_amistades.setText("Amistades");
-        jPanel1.add(Etiqueta_amistades, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 10, -1, -1));
-
         Resultados.setColumns(20);
         Resultados.setRows(5);
         jScrollPane1.setViewportView(Resultados);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 100, 580, 160));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 130, 580, 160));
 
-        jLabel2.setText("Los grupos de amistades presentes (relaciones fuertemente enlazadas) en la aplicacion son:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 70, -1, -1));
-
-        Imprimir_amistades.setText("Imprimir grupos de amistades");
+        Imprimir_amistades.setFont(new java.awt.Font("Swis721 LtEx BT", 0, 12)); // NOI18N
+        Imprimir_amistades.setText("Mostrar perfiles fuertemente enlazados");
         Imprimir_amistades.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Imprimir_amistadesActionPerformed(evt);
             }
         });
-        jPanel1.add(Imprimir_amistades, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 300, -1, -1));
+        jPanel1.add(Imprimir_amistades, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 300, 280, 30));
 
-        Imprimir_el_grafo.setText("Imprimir el Grafo ");
+        Imprimir_el_grafo.setFont(new java.awt.Font("Georgia", 0, 12)); // NOI18N
+        Imprimir_el_grafo.setText("Graficar Amistades ");
         Imprimir_el_grafo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Imprimir_el_grafoActionPerformed(evt);
             }
         });
-        jPanel1.add(Imprimir_el_grafo, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 300, -1, -1));
+        jPanel1.add(Imprimir_el_grafo, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 390, 150, 30));
 
+        Devolverse.setFont(new java.awt.Font("Georgia", 0, 12)); // NOI18N
         Devolverse.setText("Atrás");
         Devolverse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 DevolverseActionPerformed(evt);
             }
         });
-        jPanel1.add(Devolverse, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 300, -1, -1));
+        jPanel1.add(Devolverse, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, -1, -1));
+
+        jLabel1.setFont(new java.awt.Font("Georgia", 0, 24)); // NOI18N
+        jLabel1.setText("Central de Impresión");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 10, -1, -1));
+
+        jToggleButton1.setFont(new java.awt.Font("Georgia", 0, 12)); // NOI18N
+        jToggleButton1.setText("Cerrar");
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jToggleButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 10, 70, -1));
+
+        jLabel3.setText("Acá podrás visualizar los perfiles de la aplicación que se encuentran en un grupo de amistad (están fuertemente conectados).");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, -1, -1));
+        jPanel1.add(mostrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 100, 520, 20));
+
+        Mostrar2.setFont(new java.awt.Font("Swis721 LtEx BT", 0, 10)); // NOI18N
+        Mostrar2.setText(" ");
+        jPanel1.add(Mostrar2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 390, 90, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 705, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 709, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
         );
 
         pack();
@@ -112,18 +161,38 @@ public class Ventana3 extends javax.swing.JFrame {
     private void Imprimir_amistadesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Imprimir_amistadesActionPerformed
         // TODO add your handling code here:
         this.Resultados.setText(this.resultadoKosaraju);
+        this.mostrar.setText("Los perfiles que se encuentran en algun grupo de amigos son los siguientes: ");
+        this.Mostrar2.setText("Presioname --->");
+        
+        
     }//GEN-LAST:event_Imprimir_amistadesActionPerformed
-
+/**
+     * Acción del botón "Imprimir el Grafo".
+     * Cierra la ventana de resultados actual (Ventana3), muestra un
+     * mensaje de ayuda que explica el código de colores del grafo y,
+     * finalmente, llama al método estático {@code MostrarGrafoVisualizado}
+     * de la clase {@code ImpresionGrafo} para abrir la ventana de
+     * visualización de GraphStream.
+     *
+     * @param evt El evento de clic del botón (auto-generado por Swing).
+     * 
+     * @author Anthony Goncalves, Rafael Alvarez
+     */
     private void Imprimir_el_grafoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Imprimir_el_grafoActionPerformed
         // TODO add your handling code here:
+
+       this.dispose();
+       JOptionPane.showMessageDialog(this,"Las esferas que contienen el mismo color representan un grupo de amistad (Perfiles furtemente enlazado) \n y las flechas representan que perfil sigue a cual perfil.","Leyenda",JOptionPane.INFORMATION_MESSAGE);
         ImpresionGrafo.MostrarGrafoVisualizado(this.grafoOriginal);
-        
-       JOptionPane.showMessageDialog(this,
-               "Las esferas que tengan el mismo color respresentan que estan fuertemente enlazadas",
-               "NOTA", 
-               JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_Imprimir_el_grafoActionPerformed
 
+     
+     /* Acción del botón Devolverse
+     * Cierra esta ventana3 y abre la ventana2, 
+     *
+     * @param evt El evento de clic del botón (auto-generado por Swing).
+     * @author Anthony Goncalves, Rafael Álvarez
+     */
     private void DevolverseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DevolverseActionPerformed
         // TODO add your handling code here:
         this.dispose();
@@ -131,6 +200,10 @@ public class Ventana3 extends javax.swing.JFrame {
         ventanaOperaciones.setVisible(true);
     ventanaOperaciones.setLocationRelativeTo(null);
     }//GEN-LAST:event_DevolverseActionPerformed
+
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -157,12 +230,15 @@ public class Ventana3 extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Devolverse;
-    private javax.swing.JLabel Etiqueta_amistades;
     private javax.swing.JButton Imprimir_amistades;
     private javax.swing.JButton Imprimir_el_grafo;
+    private javax.swing.JLabel Mostrar2;
     private javax.swing.JTextArea Resultados;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JLabel mostrar;
     // End of variables declaration//GEN-END:variables
 }

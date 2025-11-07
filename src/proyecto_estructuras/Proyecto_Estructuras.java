@@ -4,9 +4,13 @@
  */
 package proyecto_estructuras;
 /**
+ * Clase principal (Main) del proyecto de Análisis de Redes Sociales.
+ * Esta clase contiene el método que sirve como punto de
+ * entrada para la aplicación, inicializando y mostrando la 
+ * interfaz gráfica principal (Interfaz).
  *
  * @author Anthony, Miguel Sulbarán, Rafael Álvarez
- * 
+ * @version 1.0
  */
 public class Proyecto_Estructuras {
 

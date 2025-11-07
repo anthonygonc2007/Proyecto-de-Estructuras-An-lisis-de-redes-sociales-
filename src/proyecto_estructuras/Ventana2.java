@@ -9,8 +9,13 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 /**
+ * Representa la ventana principal de la aplicación para la gestión del grafo.
+ * Esta interfaz (JFrame) se muestra después de cargar el archivo inicial
+ * y permite al usuario agregar/eliminar perfiles (nodos), agregar/eliminar
+ * relaciones (aristas) 
  *
- * @author Antho
+ * @author Anthony Goncalves, Miguel Sulbaran, Rafael Álvarez
+ * @version 1.0
  */
 public class Ventana2 extends javax.swing.JFrame{
 
@@ -19,10 +24,11 @@ public class Ventana2 extends javax.swing.JFrame{
     private String RespaldoVentana2;
 
     /**
-     * Creates new form Ventana2
+     * Constructor por defecto de Ventana2 (sin argumentos).
+     * Inicializa los componentes de la GUI (initComponents) y establece
+     * las variables internas del grafo.
      */
-    
-    public Ventana2() {
+        public Ventana2() {
         initComponents();
          this.GrafoCargado = new Grafo();
         
@@ -47,7 +53,7 @@ public class Ventana2 extends javax.swing.JFrame{
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        Cerrar = new javax.swing.JButton();
         BotonSiguiente2 = new javax.swing.JButton();
         Mostrar_PerfilesVentana2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -65,14 +71,14 @@ public class Ventana2 extends javax.swing.JFrame{
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton1.setFont(new java.awt.Font("Georgia", 0, 12)); // NOI18N
-        jButton1.setText("Salir");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        Cerrar.setFont(new java.awt.Font("Georgia", 0, 12)); // NOI18N
+        Cerrar.setText("Cerrar");
+        Cerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                CerrarActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(622, 10, 70, -1));
+        jPanel1.add(Cerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(622, 10, 70, -1));
 
         BotonSiguiente2.setFont(new java.awt.Font("Georgia", 0, 12)); // NOI18N
         BotonSiguiente2.setText("Siguiente");
@@ -90,7 +96,7 @@ public class Ventana2 extends javax.swing.JFrame{
                 Mostrar_PerfilesVentana2ActionPerformed(evt);
             }
         });
-        jPanel1.add(Mostrar_PerfilesVentana2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 390, 230, 30));
+        jPanel1.add(Mostrar_PerfilesVentana2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 360, 230, 30));
 
         jLabel1.setFont(new java.awt.Font("Georgia", 0, 24)); // NOI18N
         jLabel1.setText("Central de Edicición");
@@ -104,7 +110,7 @@ public class Ventana2 extends javax.swing.JFrame{
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 220, 450, 160));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 190, 450, 160));
 
         CrearPerfil.setFont(new java.awt.Font("Swis721 LtEx BT", 0, 12)); // NOI18N
         CrearPerfil.setText("Crear Nuevo Perfil");
@@ -149,13 +155,13 @@ public class Ventana2 extends javax.swing.JFrame{
                 GuardarbotonActionPerformed(evt);
             }
         });
-        jPanel1.add(Guardarboton, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 180, 170, 30));
+        jPanel1.add(Guardarboton, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 360, 170, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 705, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -164,7 +170,15 @@ public class Ventana2 extends javax.swing.JFrame{
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+/**
+     * Acción del botón "Mostrar_Perfiles".
+     * Llama al método 'Recorrer()' del grafo principal (grafoVentana2)
+     * y muestra el String resultante (que lista todos los nodos y sus
+     * adyacencias) en el componente 'jTextArea1'.
+     *
+     * @param evt El evento de clic del botón (auto-generado por Swing).
+     * @author Anthony Goncalves
+     */
     private void Mostrar_PerfilesVentana2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Mostrar_PerfilesVentana2ActionPerformed
         // TODO add your handling code here:
         this.jTextArea1.setText(this.grafoVentana2.Recorrer());
@@ -172,11 +186,29 @@ public class Ventana2 extends javax.swing.JFrame{
 
     }//GEN-LAST:event_Mostrar_PerfilesVentana2ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    /**
+     * Acción del botón
+     * Cierra esta ventana (Ventana2) y libera sus recursos, 
+     *
+     * @param evt El evento de clic del botón (auto-generado por Swing).
+     * @author Anthony Goncalves
+     */
+    private void CerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CerrarActionPerformed
         // TODO add your handling code here:
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_CerrarActionPerformed
 
+    /**
+     * Acción del botón "EliminarPerfil".
+     * Muestra un diálogo que solicita el nombre de un usuario a eliminar.
+     * Valida que el formato del nombre sea correcto (no vacío, empieza con '@',
+     * sin espacios) y, si es válido, llama al método 'EliminarNodo' del grafo.
+     * El diálogo se repite hasta que el formato sea válido o el usuario cancele.
+     *
+     * @param evt El evento de clic del botón (auto-generado por Swing).
+     * 
+     * @author Anthony Goncalves
+     */
     private void EliminarPerfil1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarPerfil1ActionPerformed
 
         String Usuario = ""; 
@@ -219,6 +251,17 @@ public class Ventana2 extends javax.swing.JFrame{
         
     }//GEN-LAST:event_EliminarPerfil1ActionPerformed
 
+    /**
+     * Acción del botón "CrearPerfil".
+     * Muestra un diálogo que solicita el nombre de un nuevo usuario.
+     * Valida que el formato del nombre sea correcto (no vacío, empieza con '@',
+     * sin espacios) y, si es válido, llama al método 'NuevoNodo' del grafo.
+     * El diálogo se repite hasta que el formato sea válido o el usuario cancele.
+     *
+     * @param evt El evento de clic del botón (auto-generado por Swing).
+     * 
+     * @author Anthony Goncalves
+     */
     private void CrearPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearPerfilActionPerformed
         // TODO add your handling code here:
         String Usuario = ""; 
@@ -259,6 +302,17 @@ public class Ventana2 extends javax.swing.JFrame{
 
     }//GEN-LAST:event_CrearPerfilActionPerformed
 
+    /**
+     * Acción del botón "AgregarAmistad"
+     * Este método lleva a cabo la creación de una nueva arista (relación) en el grafo.
+     * Valida que el formato del nombre sea correcto (no vacío, empieza con '@',
+     * sin espacios) y, si es válido, llama al método 'NuevoNodo' del grafo.
+     * El diálogo se repite hasta que el formato sea válido o el usuario cancele.
+     *
+     * @param evt El evento de clic del botón (auto-generado por Swing).
+     * 
+     * @author Aunthony Goncalves
+     */
     private void AgregarAmistadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarAmistadActionPerformed
         // TODO add your handling code here:
         String Usuario_Origen = "";
@@ -334,6 +388,17 @@ public class Ventana2 extends javax.swing.JFrame{
         
     }//GEN-LAST:event_AgregarAmistadActionPerformed
 
+        /**
+     * Acción del botón "EliminarAmistad"
+     * Este método lleva a cabo la aliminació de una arista ya existente (relación) en el grafo.
+     * Valida que el formato del nombre sea correcto (no vacío, empieza con '@',
+     * sin espacios) y, si es válido, llama al método 'EliminarArista' del grafo.
+     * El diálogo se repite hasta que el formato sea válido o el usuario cancele.
+     *
+     * @param evt El evento de clic del botón (auto-generado por Swing).
+     * 
+     * @author Aunthony Goncalves
+     */
     private void EliminarAmistadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarAmistadActionPerformed
         // TODO add your handling code here:
         
@@ -409,15 +474,30 @@ public class Ventana2 extends javax.swing.JFrame{
         
         
     }//GEN-LAST:event_EliminarAmistadActionPerformed
-
+    
+    /**
+     * Acción del BotonSiguiente2 
+     * Cierra esta ventana (Ventana2) y abre la ventana3, 
+     *
+     * @param evt El evento de clic del botón (auto-generado por Swing).
+     * @author Anthony Goncalves
+     */
     private void BotonSiguiente2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonSiguiente2ActionPerformed
         // TODO add your handling code here:
         String resultadoAnalisis = grafoVentana2.Kosaraju();
         Ventana3 NuevaV = new Ventana3(grafoVentana2, resultadoAnalisis, this.RespaldoVentana2);
-NuevaV.setVisible(true);
-this.dispose(); 
+        NuevaV.setVisible(true);
+        this.dispose(); 
     }//GEN-LAST:event_BotonSiguiente2ActionPerformed
 
+    /**
+     * Acción del Guardar 
+     * Abre un diálogo {@code JFileChooser} para que el usuario seleccione
+     * dónde guardar el estado actual del grafo en un archivo .txt.
+     *  
+     * @param evt El evento de clic del botón (auto-generado por Swing).
+     * @author Anthony Goncalves, Miguel Sulbaran 
+     */
     private void GuardarbotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarbotonActionPerformed
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Guardar grafo y modificar archivo de texto");
@@ -433,14 +513,14 @@ this.dispose();
 
         try (FileWriter writer = new FileWriter(archivo)) {
             
-            writer.write("Usuarios:\n");
+            writer.write("usuarios\n");
             NodoGrafo nodo = grafoVentana2.getPrimero();
             while (nodo != null) {
                 writer.write(nodo.data + "\n");
                 nodo = nodo.siguiente;
             }
 
-            writer.write("Relaciones:\n");
+            writer.write("relaciones\n");
             nodo = grafoVentana2.getPrimero();
             while (nodo != null) {
                 Arco arco = nodo.listaAdyacente.pPrimero;
@@ -501,12 +581,12 @@ this.dispose();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AgregarAmistad;
     private javax.swing.JButton BotonSiguiente2;
+    private javax.swing.JButton Cerrar;
     private javax.swing.JButton CrearPerfil;
     private javax.swing.JButton EliminarAmistad;
     private javax.swing.JButton EliminarPerfil1;
     private javax.swing.JButton Guardarboton;
     private javax.swing.JButton Mostrar_PerfilesVentana2;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
