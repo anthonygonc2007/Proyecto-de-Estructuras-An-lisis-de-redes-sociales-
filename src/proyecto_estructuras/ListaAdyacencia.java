@@ -4,6 +4,8 @@
  */
 package proyecto_estructuras;
 
+
+
 /**
  *
  * @author Antho
@@ -98,5 +100,5 @@ public class ListaAdyacencia {
         }
         return "Perfil eliminado de amigos";
     }
-
+        public Arco getpPrimero() { return this.pPrimero; }
 }

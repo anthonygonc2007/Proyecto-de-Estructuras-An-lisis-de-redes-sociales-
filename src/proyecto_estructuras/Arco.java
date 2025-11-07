@@ -6,7 +6,7 @@ package proyecto_estructuras;
 
 /**
  *
- * @author Antho, Miguel Sulbarán
+ * @author Antho, Miguel Sulbarán, Rafael Álvarez
  * 
  */
 public class Arco {

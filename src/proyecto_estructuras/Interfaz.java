@@ -4,6 +4,7 @@
  */
 package proyecto_estructuras;
 
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -13,64 +14,73 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
- * @author Miguel Sulbarán
- * 
+ * @author Antho, Miguel Sulbarán, Rafael Álvarez
+ *
  */
 public class Interfaz extends javax.swing.JFrame {
-    
+
+    private boolean Archivo_txt_Cargado = false;
+    private Grafo grafito;
+    private String Respaldo_V3;
+
     /**
      * Creates new form Interfaz
      */
     public Interfaz() {
-        this.setVisible(true);
+        this.grafito = new Grafo();
         initComponents();
+        this.setVisible(true);
     }
 
     public void Leertexto(File archivo, Grafo grafito) {
+        this.Respaldo_V3 = archivo.getAbsolutePath();
         try (BufferedReader buffer = new BufferedReader(new FileReader(archivo))) {
-                String aux;
-                boolean leerUsuarios = false;
-                boolean leerRelaciones = false;
+            String aux;
+            boolean leerUsuarios = false;
+            boolean leerRelaciones = false;
 
-                while ((aux = buffer.readLine()) != null) {
-                    aux = aux.trim();
-                    if (aux.isEmpty()) continue;
+            while ((aux = buffer.readLine()) != null) {
+                aux = aux.trim();
+                if (aux.isEmpty()) {
+                    continue;
+                }
 
-                    if (aux.equalsIgnoreCase("Usuarios")) {
-                        leerUsuarios = true;
-                        leerRelaciones = false;
-                        continue;
-                    }
-                    if (aux.equalsIgnoreCase("Relaciones")) {
-                        leerUsuarios = false;
-                        leerRelaciones = true;
-                        continue;
-                    }
+                if (aux.equalsIgnoreCase("Usuarios")) {
+                    leerUsuarios = true;
+                    leerRelaciones = false;
+                    continue;
+                }
+                if (aux.equalsIgnoreCase("Relaciones")) {
+                    leerUsuarios = false;
+                    leerRelaciones = true;
+                    continue;
+                }
 
-                    if (leerUsuarios) {
-                        grafito.NuevoNodo(aux);
-                        continue;
-                    }
+                if (leerUsuarios) {
+                    grafito.NuevoNodo(aux);
+                    continue;
+                }
 
-                    if (leerRelaciones) {
-                        String[] partes = aux.split(",");
-                        if (partes.length == 2) {
-                            String origen = partes[0].trim();
-                            String destino = partes[1].trim();
-                            grafito.NuevaArista(origen, destino);
-                        }
+                if (leerRelaciones) {
+                    String[] partes = aux.split(",");
+                    if (partes.length == 2) {
+                        String origen = partes[0].trim();
+                        String destino = partes[1].trim();
+                        grafito.NuevaArista(origen, destino);
+                        this.Archivo_txt_Cargado = true;
                     }
                 }
-                
-         } catch (Exception e) {
+            }
+
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null,
-                "Error al leer el archivo: " + e.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
-    }
-                
+                    "Error al leer el archivo: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            this.Archivo_txt_Cargado = false;
+        }
+
     }
 
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -81,22 +91,21 @@ public class Interfaz extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         botonagregararchivo = new javax.swing.JButton();
         Exit = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         Resultado = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        Label_Muestra_txt = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBackground(new java.awt.Color(204, 255, 255));
+        jPanel1.setBackground(new java.awt.Color(204, 204, 204));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel1.setText("Red Social");
-        jLabel1.setToolTipText("");
-
+        botonagregararchivo.setFont(new java.awt.Font("Swis721 LtEx BT", 0, 12)); // NOI18N
         botonagregararchivo.setText("Agregar Archivo de Texto (.txt)");
         botonagregararchivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -104,6 +113,7 @@ public class Interfaz extends javax.swing.JFrame {
             }
         });
 
+        Exit.setFont(new java.awt.Font("Georgia", 0, 12)); // NOI18N
         Exit.setText("Salir");
         Exit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -112,54 +122,76 @@ public class Interfaz extends javax.swing.JFrame {
         });
 
         Resultado.setColumns(20);
+        Resultado.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         Resultado.setRows(5);
         jScrollPane1.setViewportView(Resultado);
 
-        jLabel2.setText("Lista de seguidores y seguidos:");
+        jLabel2.setText("Por favor cargue un archivo .txt que contenga los perfiles y relaciones básicas para inicializar el programa.");
+
+        jLabel1.setFont(new java.awt.Font("Georgia", 0, 24)); // NOI18N
+        jLabel1.setText("Análisis de Redes Sociales");
+
+        jButton1.setFont(new java.awt.Font("Georgia", 0, 12)); // NOI18N
+        jButton1.setText("Siguiente");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        Label_Muestra_txt.setText("    ");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(Exit)
-                .addGap(22, 22, 22))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(225, 225, 225)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(136, 136, 136)
+                        .addComponent(Exit, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(21, 21, 21))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(170, 170, 170)
+                        .addGap(226, 226, 226)
                         .addComponent(botonagregararchivo))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jLabel2)))
+                        .addGap(99, 99, 99)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Label_Muestra_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 611, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 492, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(38, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(23, 23, 23))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(jLabel1)
-                .addGap(27, 27, 27)
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(Exit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(15, 15, 15)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(botonagregararchivo)
-                .addGap(22, 22, 22)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                .addComponent(Exit)
-                .addGap(21, 21, 21))
+                .addGap(18, 18, 18)
+                .addComponent(Label_Muestra_txt)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
+                .addComponent(jButton1)
+                .addGap(18, 18, 18))
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 550, 350));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 710, 440));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -172,41 +204,61 @@ public class Interfaz extends javax.swing.JFrame {
         JFileChooser Leertexto = new JFileChooser();
         Leertexto.setDialogTitle("Seleccionar archivo de texto .txt por favor");
 
-  
         FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos de texto (*.txt)", "txt");
         Leertexto.setFileFilter(filtro);
 
         int lectura = Leertexto.showOpenDialog(this);
 
-        if (lectura == JFileChooser.APPROVE_OPTION) {
+        if (lectura == JFileChooser.APPROVE_OPTION){
             File archivo = Leertexto.getSelectedFile();
 
-            if (!archivo.getName().toLowerCase().endsWith(".txt")) {
-            JOptionPane.showMessageDialog(this, 
-                "Error: Solo se permiten archivos con extensión .txt",
-                "Archivo inválido", 
-                JOptionPane.ERROR_MESSAGE);
+            if (!archivo.getName().toLowerCase().endsWith(".txt")){
+                JOptionPane.showMessageDialog(this,
+                        "Error: Solo se permiten archivos con extensión .txt",
+                        "Archivo inválido",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
-                }
+            }
 
-        
-            try {
-                Grafo grafito = new Grafo();
+            try{
+                //Grafo grafito = new Grafo();
                 Leertexto(archivo, grafito);
 
-                JOptionPane.showMessageDialog(this, 
-                "Archivo cargado correctamente.",
-                "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                
+                JOptionPane.showMessageDialog(this,
+                        "Archivo cargado correctamente.",
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+                this.Label_Muestra_txt.setText("Los usuarios y relaciones cargadas del archivo .txt son las siguientes:");
                 Resultado.setText(grafito.Recorrer());
 
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, 
-                "Error al leer el archivo: " + e.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
-                }
-    }
+            } catch(Exception e){
+                JOptionPane.showMessageDialog(this,
+                        "Error al leer el archivo: " + e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_botonagregararchivoActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+
+        if (this.Archivo_txt_Cargado == false){
+            JOptionPane.showMessageDialog(this,
+                    "Debe cargar primeramente un archivo .txt antes de continuar.",
+                    "Validación",
+                    JOptionPane.WARNING_MESSAGE);
+
+        }else{
+        Ventana2 ventana2 = new Ventana2(this.grafito,this.Respaldo_V3);
+        this.dispose();
+
+        ventana2.setVisible(true);
+        ventana2.setLocationRelativeTo(null);
+        //ventana2.setSize(705, 300);
+        ventana2.setResizable(false);
+
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -234,6 +286,7 @@ public class Interfaz extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Interfaz.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -245,8 +298,10 @@ public class Interfaz extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Exit;
+    private javax.swing.JLabel Label_Muestra_txt;
     private javax.swing.JTextArea Resultado;
     private javax.swing.JButton botonagregararchivo;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

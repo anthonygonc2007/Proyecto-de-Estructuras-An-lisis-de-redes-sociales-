@@ -6,7 +6,7 @@ package proyecto_estructuras;
 
 /**
  *
- * @author Antho, Miguel Sulbarán
+ * @author Antho, Miguel Sulbarán, Rafael Álvarez
  * 
  */
 public class Grafo{
@@ -76,7 +76,7 @@ public class Grafo{
     
     
     
-    private NodoGrafo BuscarNodo(String dato){
+    public NodoGrafo BuscarNodo(String dato){
         if (this.GrafoEsvacio()){
             return null;
         }
@@ -157,7 +157,7 @@ public class Grafo{
     }
     
     public void LimpiarVisitados() {
-    NodoGrafo aux = primero;
+    NodoGrafo aux = this.primero;
     while (aux != null) {
         aux.Visitado = false;
         aux = aux.siguiente;
@@ -186,23 +186,35 @@ public class Grafo{
     
     }
     
-    public String DfsInvertido(NodoGrafo nodo) {
+    public String DfsInvertido(NodoGrafo nodo, int currentCFCid, Grafo original) {
     nodo.Visitado = true;
     String componente = nodo.data + " ";
-
-    Arco arco = nodo.listaAdyacente.pPrimero;
-    while (arco != null) {
-        NodoGrafo destino = BuscarNodo(arco.Destino);
-        if (destino != null && !destino.Visitado) {
-            componente += DfsInvertido(destino);
-        }
-        arco = arco.pSiguiente;
-        }
-    return componente;
+    
+    
+    NodoGrafo nodoOriginal = original.BuscarNodo(nodo.data);
+    if (nodoOriginal != null) {
+        nodoOriginal.IDS_CFC = currentCFCid;
     }
     
-    public void Kosaraju() {
+    Arco pAux = nodo.listaAdyacente.getpPrimero();
+    while (pAux != null) {
+        NodoGrafo v_node = this.BuscarNodo(pAux.Destino);
+        
+        if (v_node != null && !v_node.Visitado) {
+         
+            componente += DfsInvertido(v_node, currentCFCid, original); 
+        }
+        pAux = pAux.pSiguiente;
+    }
+    return componente;
+    
+     }
+    
+    public String Kosaraju() {
 
+        this.LimpiarVisitados();
+        
+        
     Pila Pilita = new Pila();    
 
     NodoGrafo pAux = primero;
@@ -226,15 +238,20 @@ public class Grafo{
 
     Grafo inv = this.Invertido();
     inv.LimpiarVisitados();
+    
+        int Contador_de_cfc = 0;
 
     String Fuertes = "";
     String Debiles = "";
+    String Resultado = "";
 
     while (!Pilita.EsVacio()) {
         String nombre = Pilita.Desapilar();
         NodoGrafo nodo = inv.BuscarNodo(nombre);
+        
         if (nodo != null && !nodo.Visitado) {
-            String Usuario = inv.DfsInvertido(nodo);
+            Contador_de_cfc++;
+            String Usuario = inv.DfsInvertido(nodo, Contador_de_cfc, this);
             int cantidad = Usuario.split(" ").length;
 
                 if (cantidad > 1) {
@@ -246,19 +263,22 @@ public class Grafo{
                  
     }
     
+    Resultado += "Analisis del algoritmo de Kosaraju\n\n\n";
         if (Fuertes.isEmpty()) {
-            System.out.println("No hay Usuarios Fuertemente Conectados");
+            Resultado += "No hubo ningun elemento fuertemente conectado\n\n";
         } else  {
-            System.out.println("Usuarios Fuertemente Conectados: " + (Fuertes));
+            Resultado += " Los usuarios Fuertemente Enlazados son:\n\n";
+        Resultado += Fuertes.trim().replaceAll(" ", " | ") + "\n\n";
         }
         
         if (Debiles.isEmpty()) {
-            System.out.println("No hay Usuarios Debilmente Conectados");
+            Resultado += " Nodos Aislados o Débilmente Conectados:\n";
+        Resultado += Debiles.trim().replaceAll(" ", ", ") + "\n";
         } else {
-            System.out.println("Usuarios Debilmente Conectados: " + (Debiles));
+        
         }
-    
+    return Resultado;
     }
-
+        public NodoGrafo getPrimero() { return this.primero; }  
 }
 
